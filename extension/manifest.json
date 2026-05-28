@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Fake Job Detector",
+  "version": "2.0",
+  "description": "Auto-scans job postings and accepts PDF/Image uploads to detect scams.",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

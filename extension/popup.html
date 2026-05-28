@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Fake Job Detector</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; width: 320px; padding: 15px; text-align: center; background-color: #f9f9f9; }
+    h2 { margin-top: 0; color: #333; }
+    #result { margin: 15px 0; font-weight: bold; font-size: 18px; padding: 10px; border-radius: 8px; }
+    .scam { background-color: #ffeaea; color: #d93025; border: 1px solid #d93025; }
+    .safe { background-color: #e6f4ea; color: #137333; border: 1px solid #137333; }
+    .loading { color: #5f6368; font-style: italic; }
+    .upload-section { margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd; }
+    input[type="file"], input[type="text"] { margin-top: 5px; width: 90%; font-size: 12px; padding: 5px; }
+    button { margin-top: 8px; padding: 6px 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background-color: #0056b3; }
+  </style>
+</head>
+<body>
+  <h2>🔍 Job Scam Detector</h2>
+  
+  <div id="result" class="loading">Auto-scanning page...</div>
+
+  <div class="upload-section">
+    <p style="font-size: 14px; color: #666; margin-bottom: 5px;">Paste a job link:</p>
+    <input type="text" id="url-input" placeholder="https://..." />
+    <button id="url-btn">Scan Link</button>
+  </div>
+
+  <div class="upload-section">
+    <p style="font-size: 14px; color: #666; margin-bottom: 5px;">Or upload a JD (PDF/Image):</p>
+    <input type="file" id="file-upload" accept=".pdf, image/png, image/jpeg" />
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
