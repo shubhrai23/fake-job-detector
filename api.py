@@ -5,7 +5,6 @@ import joblib
 import io
 import os
 from PyPDF2 import PdfReader
-import pytesseract
 from PIL import Image
 import requests
 from bs4 import BeautifulSoup
@@ -124,8 +123,7 @@ async def predict_file(file: UploadFile = File(...)):
                     text += extracted + " "
 
         elif filename.endswith((".png", ".jpg", ".jpeg")):
-            image = Image.open(io.BytesIO(content))
-            text = pytesseract.image_to_string(image)
+            return {"status": "error", "message": "Image upload not supported on cloud. Use PDF or paste the link instead."}
 
         else:
             return {"status": "error", "message": "Unsupported file type. Please upload a PDF, PNG, or JPG."}
