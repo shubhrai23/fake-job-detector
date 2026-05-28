@@ -3,7 +3,6 @@ uvicorn
 scikit-learn
 joblib
 PyPDF2
-pytesseract
 Pillow
 requests
 beautifulsoup4
