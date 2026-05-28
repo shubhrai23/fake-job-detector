@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        const response = await fetch('http://127.0.0.1:8000/predict', {
+        const response = await fetch('https://fake-job-detector-production-31b1.up.railway.app/predict', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: jobText })
@@ -183,7 +183,7 @@ document.getElementById('file-upload').addEventListener('change', async (event) 
     formData.append("file", file);
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/predict_file', {
+        const response = await fetch('https://fake-job-detector-production-31b1.up.railway.app/predict_file', {
             method: 'POST',
             body: formData
         });
@@ -206,7 +206,7 @@ document.getElementById('url-btn').addEventListener('click', async () => {
     setLoading("Scraping link...");
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/predict_url', {
+        const response = await fetch('https://fake-job-detector-production-31b1.up.railway.app/predict_url', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ url: urlValue })
