@@ -1,12 +1,10 @@
 // ─────────────────────────────────────────────────────────────
 // SMART JOB EXTRACTOR
-// Targets only the open job panel, not the entire page
 // ─────────────────────────────────────────────────────────────
 
 function extractJobText() {
     const host = window.location.hostname;
 
-    // ── Indeed ────────────────────────────────────────────────
     if (host.includes("indeed.com")) {
         const selectors = [
             '[data-testid="jobsearch-JobComponent"]',
@@ -20,7 +18,6 @@ function extractJobText() {
         }
     }
 
-    // ── LinkedIn ──────────────────────────────────────────────
     if (host.includes("linkedin.com")) {
         let parts = [];
         const selectors = [
@@ -36,7 +33,6 @@ function extractJobText() {
         if (parts.length) return parts.join(" ");
     }
 
-    // ── Naukri ────────────────────────────────────────────────
     if (host.includes("naukri.com")) {
         const selectors = ['.job-desc', '.jd-container', '#job_header'];
         for (const sel of selectors) {
@@ -45,7 +41,6 @@ function extractJobText() {
         }
     }
 
-    // ── Internshala ───────────────────────────────────────────
     if (host.includes("internshala.com")) {
         const selectors = ['.internship_details', '#internship_detail_container'];
         for (const sel of selectors) {
@@ -54,7 +49,6 @@ function extractJobText() {
         }
     }
 
-    // ── Glassdoor ─────────────────────────────────────────────
     if (host.includes("glassdoor.com")) {
         const selectors = [
             '[data-test="jobDescriptionContent"]',
@@ -67,7 +61,6 @@ function extractJobText() {
         }
     }
 
-    // ── Generic fallback: biggest non-nav block ───────────────
     const candidates = document.querySelectorAll(
         "article, main, section, [class*='job'], [class*='desc'], [id*='job'], [id*='desc']"
     );
@@ -80,7 +73,6 @@ function extractJobText() {
     }
     if (best && bestLen > 200) return best.innerText.trim();
 
-    // Last resort — capped at 6000 chars
     return document.body.innerText.trim().slice(0, 6000);
 }
 
@@ -97,15 +89,14 @@ function updateUI(data) {
         return;
     }
 
-    // Build flag list HTML (shown for BOTH safe and scam results)
     let flagHtml = "";
     if (data.flags && data.flags.length > 0) {
-        const items = data.flags.map(f => `<li>"${f}"</li>`).join('');
+        const items = data.flags.map(f => `<li>${f}</li>`).join('');
         flagHtml = `
             <div style="text-align:left;margin-top:12px;padding:10px;
                         background:#fff3f3;border-radius:6px;border:1px solid #ffcccc;">
                 <strong style="font-size:13px;color:#cc0000;">🚩 Red Flags Detected:</strong>
-                <ul style="margin:5px 0 0 0;padding-left:20px;font-size:13px;
+                <ul style="margin:5px 0 0 0;padding-left:20px;font-size:12px;
                            font-weight:normal;color:#333;">${items}</ul>
             </div>`;
     }
@@ -130,11 +121,11 @@ function setLoading(msg = "Scanning job...") {
 }
 
 // ─────────────────────────────────────────────────────────────
-// 1. AUTO-SCAN (runs immediately when popup opens)
+// 1. AUTO-SCAN
 // ─────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', async () => {
-    setLoading("Auto-scanning job...");
+    setLoading("⏳ Analyzing job posting... (may take 30s on first load)");
 
     try {
         let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -145,10 +136,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         const jobText = injectionResults[0].result;
-        console.log(`[FJD] Extracted ${jobText?.length ?? 0} chars`);
 
         if (!jobText || jobText.length < 50) {
-            document.getElementById('result').textContent = "No job content found. Try pasting the link below.";
+            document.getElementById('result').textContent = "No job content found. Try pasting text below.";
             document.getElementById('result').className = "loading";
             return;
         }
@@ -163,21 +153,44 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateUI(data);
 
     } catch (error) {
-        console.error("[FJD] Auto-scan error:", error);
-        document.getElementById('result').textContent = "Could not scan page — try the link scanner below.";
+        document.getElementById('result').textContent = "Could not scan page — try pasting text below.";
         document.getElementById('result').className = "loading";
     }
 });
 
 // ─────────────────────────────────────────────────────────────
-// 2. FILE UPLOAD HANDLER
+// 2. PASTE TEXT SCANNER (WhatsApp / email forwards)
+// ─────────────────────────────────────────────────────────────
+
+document.getElementById('text-btn').addEventListener('click', async () => {
+    const text = document.getElementById('text-input').value.trim();
+    if (!text || text.length < 30) return;
+
+    setLoading("⏳ Analyzing pasted text...");
+
+    try {
+        const response = await fetch('https://shubhrai23-fake-job-detector.hf.space/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text })
+        });
+        const data = await response.json();
+        updateUI(data);
+    } catch (error) {
+        document.getElementById('result').textContent = "Server error.";
+        document.getElementById('result').className = "scam";
+    }
+});
+
+// ─────────────────────────────────────────────────────────────
+// 3. FILE UPLOAD HANDLER
 // ─────────────────────────────────────────────────────────────
 
 document.getElementById('file-upload').addEventListener('change', async (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    setLoading("Analyzing file...");
+    setLoading("⏳ Analyzing file...");
 
     const formData = new FormData();
     formData.append("file", file);
@@ -190,9 +203,7 @@ document.getElementById('file-upload').addEventListener('change', async (event) 
         const data = await response.json();
         updateUI(data);
     } catch (error) {
-        document.getElementById('result').textContent = "Server error. Make sure FastAPI is running!";
+        document.getElementById('result').textContent = "Server error.";
         document.getElementById('result').className = "scam";
     }
 });
-
-
