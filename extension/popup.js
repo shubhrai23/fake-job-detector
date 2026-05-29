@@ -195,26 +195,4 @@ document.getElementById('file-upload').addEventListener('change', async (event) 
     }
 });
 
-// ─────────────────────────────────────────────────────────────
-// 3. URL LINK SCANNER
-// ─────────────────────────────────────────────────────────────
 
-document.getElementById('url-btn').addEventListener('click', async () => {
-    const urlValue = document.getElementById('url-input').value.trim();
-    if (!urlValue) return;
-
-    setLoading("Scraping link...");
-
-    try {
-        const response = await fetch('https://fake-job-detector-production-31b1.up.railway.app/predict_url', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url: urlValue })
-        });
-        const data = await response.json();
-        updateUI(data);
-    } catch (error) {
-        document.getElementById('result').textContent = "Server error. Make sure FastAPI is running!";
-        document.getElementById('result').className = "scam";
-    }
-});
