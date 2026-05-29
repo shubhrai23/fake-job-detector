@@ -1,31 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Fake Job Detector</title>
-  <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; width: 320px; padding: 15px; text-align: center; background-color: #f9f9f9; }
-    h2 { margin-top: 0; color: #333; }
-    #result { margin: 15px 0; font-weight: bold; font-size: 18px; padding: 10px; border-radius: 8px; }
-    .scam { background-color: #ffeaea; color: #d93025; border: 1px solid #d93025; }
-    .safe { background-color: #e6f4ea; color: #137333; border: 1px solid #137333; }
-    .loading { color: #5f6368; font-style: italic; }
-    .upload-section { margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd; }
-    input[type="file"], input[type="text"] { margin-top: 5px; width: 90%; font-size: 12px; padding: 5px; }
-    button { margin-top: 8px; padding: 6px 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
-    button:hover { background-color: #0056b3; }
-  </style>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            width: 320px;
+            min-height: 100px;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 16px;
+            background: #f9f9f9;
+            margin: 0;
+        }
+        h2 {
+            font-size: 16px;
+            margin: 0 0 12px 0;
+            text-align: center;
+            color: #222;
+        }
+        #result {
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .safe { background: #e0ffe0; color: #27ae60; border: 1px solid #27ae60; }
+        .scam { background: #ffe0e0; color: #c0392b; border: 1px solid #e74c3c; }
+        .loading { background: #f0f0f0; color: #666; border: 1px solid #ddd; }
+        .upload-section {
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        button {
+            margin-top: 6px;
+            width: 100%;
+            padding: 7px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        button:hover { background: #1d4ed8; }
+        input[type="file"] { font-size: 12px; width: 100%; }
+        textarea {
+            width: 100%;
+            height: 80px;
+            font-size: 12px;
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            resize: none;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        p.label {
+            font-size: 13px;
+            color: #666;
+            margin: 0 0 5px 0;
+        }
+    </style>
 </head>
 <body>
-  <h2>🔍 Job Scam Detector</h2>
-  
-  <div id="result" class="loading">Auto-scanning page...</div>
+    <h2>🔍 Job Scam Detector</h2>
 
-  <div class="upload-section">
-    <p style="font-size: 14px; color: #666; margin-bottom: 5px;">Or upload a JD (PDF/Image):</p>
-    <input type="file" id="file-upload" accept=".pdf, image/png, image/jpeg" />
-  </div>
+    <div id="result" class="loading">Scanning job posting...</div>
 
-  <script src="popup.js"></script>
+    <div class="upload-section">
+        <p class="label">📋 Paste job text (WhatsApp/email):</p>
+        <textarea id="text-input" placeholder="Paste job description here..."></textarea>
+        <button id="text-btn">Scan Pasted Text</button>
+    </div>
+
+    <div class="upload-section">
+        <p class="label">📄 Or upload a JD (PDF):</p>
+        <input type="file" id="file-upload" accept=".pdf" />
+    </div>
+
+    <script src="popup.js"></script>
 </body>
 </html>
