@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        const response = await fetch('https://fake-job-detector-production-31b1.up.railway.app/predict', {
+        const response = await fetch('https://shubhrai23-fake-job-detector.hf.space/predict', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: jobText })
@@ -183,7 +183,7 @@ document.getElementById('file-upload').addEventListener('change', async (event) 
     formData.append("file", file);
 
     try {
-        const response = await fetch('https://fake-job-detector-production-31b1.up.railway.app/predict_file', {
+        const response = await fetch('https://shubhrai23-fake-job-detector.hf.space/predict_file', {
             method: 'POST',
             body: formData
         });
