@@ -1,11 +1,13 @@
 fastapi
 uvicorn
-scikit-learn
-joblib
+scikit-learn==1.9.1
+joblib==1.6.0
 PyPDF2
 Pillow
 requests
 beautifulsoup4
 python-multipart
-numpy
+numpy==2.5.4
 pandas
+xgboost==3.4.1
+imbalanced-learn==0.14.2
